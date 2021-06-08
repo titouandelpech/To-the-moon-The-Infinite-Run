@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref ref_velocity, .05f);
         if (clickJump)
         {
+            rb.velocity = Vector3.zero;
             rb.AddForce(new Vector2(0f, jumpForce));
             clickJump = false;
             isJumping = true;
