@@ -37,7 +37,7 @@ public class PlatformsMovement : MonoBehaviour
 
     void Update()
     {
-        if (player.transform.position.y > 0 && PlayerMovement.isGrounded)
+        if (player.transform.position.y > -1 && PlayerMovement.isGrounded)
         {
             isPlatformsDowning = true;
             playerTempPosY = player.transform.position.y;
@@ -49,6 +49,10 @@ public class PlatformsMovement : MonoBehaviour
         checkCollider();
         checkDeletePlatforms();
         checkAddPlatforms();
+        if (player.transform.position.y < -7)
+        {
+            ResetGame();
+        }
     }
 
     void MoveAllPlatformsDown()
@@ -60,7 +64,7 @@ public class PlatformsMovement : MonoBehaviour
         }
         firstPlatform.transform.position -= new Vector3(0, movement);
         playerTempPosY -= movement;
-        if (playerTempPosY < -0.1 || player.transform.position.y < -0.1)
+        if (playerTempPosY < -1.1 || player.transform.position.y < -1.1)
         {
             isPlatformsDowning = false;
         }
@@ -113,5 +117,19 @@ public class PlatformsMovement : MonoBehaviour
             GameObject platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
             Platforms.Add(new Platform(platform));
         }
+    }
+
+    void ResetGame()
+    {
+        foreach (Platform platform in Platforms)
+        {
+            Destroy(platform.gameObj);
+        }
+        Platforms.Clear();
+        firstPlatform.transform.position = new Vector3(0, -4);
+        player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        player.transform.position = new Vector3(0, -3.8f);
+        GameScore.scoreValue = 0;
+        Start();
     }
 }
