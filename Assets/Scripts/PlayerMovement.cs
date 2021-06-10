@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 ref_velocity = Vector3.zero;
     public Vector3 touchCoords;
+    public Vector3 firstTouchCoords;
+    public Vector3 lastTouchCoords;
     public List<KeyValuePair<float, float>> touchHistory = new List<KeyValuePair<float, float>>(); // <time, y pos>
     public bool clickJump = false;
     public bool isGrounded = false;
@@ -46,9 +48,9 @@ public class PlayerMovement : MonoBehaviour
     {
         getTouchCoords();
         float direction = Input.GetAxisRaw("Horizontal");
-        if (touchCoords != Vector3.zero && touchIsOnMovingLine && Mathf.Abs(player.transform.position.x - touchCoords.x) > 0.1)
+        if (touchCoords != Vector3.zero && touchIsOnMovingLine && Mathf.Abs(firstTouchCoords.x - touchCoords.x) > 0.2)
         {
-            direction = (player.transform.position.x < touchCoords.x) ? 1 : -1;
+            direction = (firstTouchCoords.x < touchCoords.x) ? 1 : -1;
         }
         float horizontalMovement = direction * moveSpeed * Time.deltaTime;
 
@@ -89,13 +91,17 @@ public class PlayerMovement : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             touchCoords = Camera.main.ScreenToWorldPoint(touch.position);
+            if (touch.phase == TouchPhase.Began || Mathf.Abs(firstTouchCoords.x - touchCoords.x) < Mathf.Abs(firstTouchCoords.x - lastTouchCoords.x))
+                firstTouchCoords = touchCoords;
             touchHistory.Add(new KeyValuePair<float, float>(Time.time, touchCoords.y));
+            lastTouchCoords = touchCoords;
             touchIsGoingJump = checkTouchIsJumping();
             //touchIsOnMovingLine = (touchCoords.y < -3) ? true : false;
         }
         else
         {
             touchCoords = Vector3.zero;
+            firstTouchCoords = Vector3.zero;
             touchIsGoingJump = false;
             //touchIsOnMovingLine = false;
             touchHistory.Clear();
@@ -115,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             }
             foreach (KeyValuePair<float, float> pair in touchHistory)
             {
-                if (touchCoords.y - pair.Value > 0.5)
+                if (touchCoords.y - pair.Value > 0.3)
                 {
                     ret = true;
                 }

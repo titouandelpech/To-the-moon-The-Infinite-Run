@@ -63,6 +63,7 @@ public class PlatformsMovement : MonoBehaviour
             platform.gameObj.transform.position -= new Vector3(0, movement);
         }
         firstPlatform.transform.position -= new Vector3(0, movement);
+        player.transform.position -= new Vector3(0, movement);
         playerTempPosY -= movement;
         if (playerTempPosY < -1.1 || player.transform.position.y < -1.1)
         {
