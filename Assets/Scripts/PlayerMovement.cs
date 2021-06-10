@@ -14,9 +14,13 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
 
     private Vector3 ref_velocity = Vector3.zero;
+    public Vector3 touchCoords;
+    public List<KeyValuePair<float, float>> touchHistory = new List<KeyValuePair<float, float>>(); // <time, y pos>
     public bool clickJump = false;
     public bool isGrounded = false;
     public bool isJumping = false;
+    public bool touchIsOnMovingLine = true;
+    public bool touchIsGoingJump = false;
 
     void Start()
     {
@@ -26,9 +30,10 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapArea(PLeft.position, PRight.position);
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if ((Input.GetButtonDown("Jump") || touchIsGoingJump) && isGrounded)
         {
             clickJump = true;
+            touchIsGoingJump = false;
         }
         if (isJumping && isGrounded)
         {
@@ -39,7 +44,13 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        float horizontalMovement = Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime;
+        getTouchCoords();
+        float direction = Input.GetAxisRaw("Horizontal");
+        if (touchCoords != Vector3.zero && touchIsOnMovingLine && Mathf.Abs(player.transform.position.x - touchCoords.x) > 0.1)
+        {
+            direction = (player.transform.position.x < touchCoords.x) ? 1 : -1;
+        }
+        float horizontalMovement = direction * moveSpeed * Time.deltaTime;
 
         MovePlayer(horizontalMovement);
         CheckFlip(horizontalMovement);
@@ -70,5 +81,59 @@ public class PlayerMovement : MonoBehaviour
         {
             player.flipX = true;
         }
+    }
+
+    void getTouchCoords()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            touchCoords = Camera.main.ScreenToWorldPoint(touch.position);
+            touchHistory.Add(new KeyValuePair<float, float>(Time.time, touchCoords.y));
+            touchIsGoingJump = checkTouchIsJumping();
+            //touchIsOnMovingLine = (touchCoords.y < -3) ? true : false;
+        }
+        else
+        {
+            touchCoords = Vector3.zero;
+            touchIsGoingJump = false;
+            //touchIsOnMovingLine = false;
+            touchHistory.Clear();
+        }
+    }
+
+    bool checkTouchIsJumping()
+    {
+        bool ret = false;
+        KeyValuePair<float, float> pairToRemove = default(KeyValuePair<float, float>);
+        do
+        {
+            if (!pairToRemove.Equals(default(KeyValuePair<float, float>)))
+            {
+                touchHistory.Remove(pairToRemove);
+                pairToRemove = default(KeyValuePair<float, float>);
+            }
+            foreach (KeyValuePair<float, float> pair in touchHistory)
+            {
+                if (touchCoords.y - pair.Value > 0.5)
+                {
+                    ret = true;
+                }
+                if (pair.Key < Time.time - 1)
+                {
+                    pairToRemove = pair;
+                }
+                else
+                {
+                    pairToRemove = default(KeyValuePair<float, float>);
+                }
+            }
+            if (ret == true)
+            {
+                touchHistory.Clear();
+                return true;
+            }
+        } while (!pairToRemove.Equals(default(KeyValuePair<float, float>)));
+        return ret;
     }
 }

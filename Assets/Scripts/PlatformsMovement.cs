@@ -103,7 +103,7 @@ public class PlatformsMovement : MonoBehaviour
             }
             foreach (Platform platform in Platforms)
             {
-                if (platform.gameObj.transform.position.y < -6)
+                if (platform.gameObj.transform.position.y < -5.4)
                     platformToRemove = platform;
             }
         } while (platformToRemove != null);
