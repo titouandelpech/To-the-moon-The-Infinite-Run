@@ -17,6 +17,7 @@ public class PlatformsMovement : MonoBehaviour
     public List<Platform> Platforms = new List<Platform>();
     public GameObject firstPlatform;
     public GameObject basicPlatform;
+    public GameObject smallPlatform;
     public GameObject game;
     public GameObject player;
 
@@ -30,7 +31,7 @@ public class PlatformsMovement : MonoBehaviour
     {
         for (int i = -2; i < 12; i += 2)
         {
-            GameObject platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), i), Quaternion.identity, game.transform);
+            GameObject platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), i), Quaternion.identity, game.transform);
             Platforms.Add(new Platform(platform));
         }
     }
@@ -51,6 +52,8 @@ public class PlatformsMovement : MonoBehaviour
         checkAddPlatforms();
         if (player.transform.position.y < -7)
         {
+            if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
+                PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
             ResetGame();
         }
     }
@@ -115,12 +118,45 @@ public class PlatformsMovement : MonoBehaviour
         float lastPlatPosY = Platforms[Platforms.Count - 1].gameObj.transform.position.y;
         if (lastPlatPosY < 8)
         {
-            GameObject platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+            GameObject platform;
+            if (GameScore.scoreValue <= 15)
+                platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+            else if (GameScore.scoreValue > 15 && GameScore.scoreValue <= 40)
+            {
+                if (Random.Range(0, 2) == 0)
+                    platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+                else
+                    platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+            }
+            else if (GameScore.scoreValue > 40 && GameScore.scoreValue <= 90)
+            {
+                if (Random.Range(0, 3) == 0)
+                    platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+                else if (Random.Range(0, 2) == 0)
+                    platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+                else
+                    platform = Instantiate(smallPlatform, new Vector3(Random.Range(-1.92f, 1.92f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+            }
+            else if (GameScore.scoreValue > 90 && GameScore.scoreValue <= 150)
+            {
+                if (Random.Range(0, 2) == 0)
+                    platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+                else
+                    platform = Instantiate(smallPlatform, new Vector3(Random.Range(-1.92f, 1.92f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+            }
+            else
+            {
+                if (Random.Range(0, 3) == 0)
+                    platform = Instantiate(basicPlatform, new Vector3(Random.Range(-1.7f, 1.7f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+                else
+                    platform = Instantiate(smallPlatform, new Vector3(Random.Range(-1.92f, 1.92f), lastPlatPosY + 2), Quaternion.identity, game.transform);
+
+            }
             Platforms.Add(new Platform(platform));
         }
     }
 
-    void ResetGame()
+    public void ResetGame()
     {
         foreach (Platform platform in Platforms)
         {
