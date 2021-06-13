@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Platform
 {
-    public Platform(GameObject platform)
+    public Platform(GameObject platform, GameObject spike = null)
     {
-        gameObj = platform;
+        this.gameObj = platform;
+        this.spike = spike;
     }
     public GameObject gameObj;
     public bool hasBeenPassed = false;
+    public GameObject spike;
 }
 
 public class PlatformsMovement : MonoBehaviour
@@ -18,6 +20,7 @@ public class PlatformsMovement : MonoBehaviour
     public GameObject firstPlatform;
     public GameObject basicPlatform;
     public GameObject smallPlatform;
+    public GameObject basicSpike;
     public GameObject game;
     public GameObject player;
 
@@ -27,6 +30,9 @@ public class PlatformsMovement : MonoBehaviour
     public bool isPlatformsDowning;
     public float playerTempPosY;
     public float platformSpeed;
+
+    public bool isSpikeTouched;
+    public float timeAfterSpiked;
     void Start()
     {
         for (int i = -2; i < 12; i += 2)
@@ -47,15 +53,21 @@ public class PlatformsMovement : MonoBehaviour
         {
             MoveAllPlatformsDown();
         }
+        checkSpikeTouched();
         checkCollider();
         checkDeletePlatforms();
         checkAddPlatforms();
         if (player.transform.position.y < -7)
         {
-            if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
-                PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
-            ResetGame();
+            doPlayerDied();
         }
+    }
+
+    void doPlayerDied()
+    {
+        if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
+            PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
+        ResetGame();
     }
 
     void MoveAllPlatformsDown()
@@ -64,6 +76,8 @@ public class PlatformsMovement : MonoBehaviour
         foreach (Platform platform in Platforms)
         {
             platform.gameObj.transform.position -= new Vector3(0, movement);
+            if (platform.spike)
+                platform.spike.transform.position -= new Vector3(0, movement);
         }
         firstPlatform.transform.position -= new Vector3(0, movement);
         player.transform.position -= new Vector3(0, movement);
@@ -119,6 +133,7 @@ public class PlatformsMovement : MonoBehaviour
         if (lastPlatPosY < 8)
         {
             GameObject platform;
+            GameObject spike = null;
             if (GameScore.scoreValue <= 15)
                 platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), lastPlatPosY + 2), Quaternion.identity, game.transform);
             else if (GameScore.scoreValue > 15 && GameScore.scoreValue <= 40)
@@ -152,7 +167,34 @@ public class PlatformsMovement : MonoBehaviour
                     platform = Instantiate(smallPlatform, new Vector3(Random.Range(-1.92f, 1.92f), lastPlatPosY + 2), Quaternion.identity, game.transform);
 
             }
-            Platforms.Add(new Platform(platform));
+            if (!Platforms[Platforms.Count - 1].spike && Random.Range(0, 7) == 0)
+                spike = Instantiate(basicSpike, new Vector3((Random.Range(0, 2) == 0) ? platform.transform.position.x : platform.transform.position.x + 0.5f, platform.transform.position.y - 0.148f), basicSpike.transform.rotation, game.transform);
+            Platforms.Add(new Platform(platform, spike));
+        }
+    }
+
+    void checkSpikeTouched()
+    {
+        if (isSpikeTouched)
+        {
+            if (Time.time - timeAfterSpiked >= 1)
+            {
+                doPlayerDied();
+            }
+            player.transform.position += new Vector3(0, -0.03f);
+            player.transform.Rotate(Vector3.forward * 1);
+            return;
+        }
+        foreach(Platform platform in Platforms)
+        {
+            if (platform.spike != null)
+            {
+                if (Physics2D.IsTouching(platform.spike.GetComponent<BoxCollider2D>(), player.GetComponent<BoxCollider2D>()))
+                {
+                    isSpikeTouched = true;
+                    timeAfterSpiked = Time.time;
+                }
+            }
         }
     }
 
@@ -161,11 +203,15 @@ public class PlatformsMovement : MonoBehaviour
         foreach (Platform platform in Platforms)
         {
             Destroy(platform.gameObj);
+            if (platform.spike)
+                Destroy(platform.spike);
         }
+        isSpikeTouched = false;
         Platforms.Clear();
         firstPlatform.transform.position = new Vector3(0, -4);
         player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         player.transform.position = new Vector3(0, -3.8f);
+        player.transform.rotation = Quaternion.identity;
         GameScore.scoreValue = 0;
         Start();
     }
