@@ -36,7 +36,7 @@ public class SoundEffectHandler : MonoBehaviour
                     AudioSource.PlayOneShot(boing3, 3);
                     break;
                 case 3:
-                    AudioSource.PlayOneShot(boing4, 2);
+                    AudioSource.PlayOneShot(boing4, 1.5f);
                     break;
             }
         }

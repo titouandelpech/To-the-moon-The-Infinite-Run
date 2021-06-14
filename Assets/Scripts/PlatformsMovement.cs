@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Platform
 {
-    public Platform(GameObject platform, GameObject spike = null)
+    public Platform(GameObject platform, GameObject coin = null, GameObject spike = null)
     {
         this.gameObj = platform;
         this.spike = spike;
+        this.coin = coin;
     }
     public GameObject gameObj;
     public bool hasBeenPassed = false;
     public GameObject spike;
+    public GameObject coin;
 }
 
 public class PlatformsMovement : MonoBehaviour
@@ -21,6 +24,7 @@ public class PlatformsMovement : MonoBehaviour
     public GameObject basicPlatform;
     public GameObject smallPlatform;
     public GameObject basicSpike;
+    public GameObject basicCoin;
     public GameObject game;
     public GameObject player;
 
@@ -35,12 +39,18 @@ public class PlatformsMovement : MonoBehaviour
     public bool isSpikeTouched;
     public float timeAfterSpiked;
 
+    public int coinsInGame = 0;
+    public Text CoinsDisplayed;
+
     void Start()
     {
         for (int i = -2; i < 12; i += 2)
         {
             GameObject platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), i), Quaternion.identity, game.transform);
-            Platforms.Add(new Platform(platform));
+            GameObject coin = null;
+            if (Random.Range(0, 6) == 0)
+                coin = Instantiate(basicCoin, new Vector3(platform.transform.position.x, platform.transform.position.y + 0.6f), Quaternion.identity, game.transform);
+            Platforms.Add(new Platform(platform, coin));
         }
     }
 
@@ -56,6 +66,7 @@ public class PlatformsMovement : MonoBehaviour
             MoveAllPlatformsDown();
         }
         checkSpikeTouched();
+        checkCoinPicked();
         checkCollider();
         checkDeletePlatforms();
         checkAddPlatforms();
@@ -70,6 +81,7 @@ public class PlatformsMovement : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
             PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
+        PlayerPrefs.SetInt("Coins", PlayerPrefs.GetInt("Coins") + coinsInGame);
         ResetGame();
     }
 
@@ -81,6 +93,8 @@ public class PlatformsMovement : MonoBehaviour
             platform.gameObj.transform.position -= new Vector3(0, movement);
             if (platform.spike)
                 platform.spike.transform.position -= new Vector3(0, movement);
+            if (platform.coin)
+                platform.coin.transform.position -= new Vector3(0, movement);
         }
         firstPlatform.transform.position -= new Vector3(0, movement);
         player.transform.position -= new Vector3(0, movement);
@@ -120,6 +134,10 @@ public class PlatformsMovement : MonoBehaviour
             {
                 Platforms.Remove(platformToRemove);
                 Destroy(platformToRemove.gameObj);
+                if (platformToRemove.spike)
+                    Destroy(platformToRemove.spike);
+                if (platformToRemove.coin)
+                    Destroy(platformToRemove.coin);
                 platformToRemove = null;
             }
             foreach (Platform platform in Platforms)
@@ -137,6 +155,7 @@ public class PlatformsMovement : MonoBehaviour
         {
             GameObject platform;
             GameObject spike = null;
+            GameObject coin = null;
             if (GameScore.scoreValue <= 15)
                 platform = Instantiate(firstPlatform, new Vector3(Random.Range(-1.4f, 1.4f), lastPlatPosY + 2), Quaternion.identity, game.transform);
             else if (GameScore.scoreValue > 15 && GameScore.scoreValue <= 40)
@@ -172,7 +191,9 @@ public class PlatformsMovement : MonoBehaviour
             }
             if (!Platforms[Platforms.Count - 1].spike && Random.Range(0, 7) == 0)
                 spike = Instantiate(basicSpike, new Vector3((Random.Range(0, 2) == 0) ? platform.transform.position.x : platform.transform.position.x + 0.5f, platform.transform.position.y - 0.148f), basicSpike.transform.rotation, game.transform);
-            Platforms.Add(new Platform(platform, spike));
+            if (Random.Range(0, 6) == 0)
+                coin = Instantiate(basicCoin, new Vector3(platform.transform.position.x, platform.transform.position.y + 0.6f), Quaternion.identity, game.transform);
+            Platforms.Add(new Platform(platform, coin, spike));
         }
     }
 
@@ -190,7 +211,7 @@ public class PlatformsMovement : MonoBehaviour
         }
         foreach(Platform platform in Platforms)
         {
-            if (platform.spike != null)
+            if (platform.spike)
             {
                 if (Physics2D.IsTouching(platform.spike.GetComponent<BoxCollider2D>(), player.GetComponent<BoxCollider2D>()))
                 {
@@ -202,6 +223,26 @@ public class PlatformsMovement : MonoBehaviour
         }
     }
 
+    void checkCoinPicked()
+    {
+        foreach(Platform platform in Platforms)
+        {
+            if (platform.coin)
+            {
+                if (Physics2D.IsTouching(platform.coin.GetComponent<CircleCollider2D>(), player.GetComponent<BoxCollider2D>()))
+                {
+                    platform.coin.GetComponent<CircleCollider2D>().enabled = false;
+                    coinsInGame += 1;
+                    SoundEffectHandler.playSound("money");
+                    Destroy(platform.coin);
+                    platform.coin = null;
+                }
+
+            }
+        }
+        CoinsDisplayed.text = coinsInGame.ToString();
+    }
+
     public void ResetGame()
     {
         foreach (Platform platform in Platforms)
@@ -209,6 +250,8 @@ public class PlatformsMovement : MonoBehaviour
             Destroy(platform.gameObj);
             if (platform.spike)
                 Destroy(platform.spike);
+            if (platform.coin)
+                Destroy(platform.coin);
         }
         isSpikeTouched = false;
         Platforms.Clear();
@@ -217,6 +260,7 @@ public class PlatformsMovement : MonoBehaviour
         player.transform.position = new Vector3(0, -3.8f);
         player.transform.rotation = Quaternion.identity;
         GameScore.scoreValue = 0;
+        coinsInGame = 0;
         Start();
     }
 }

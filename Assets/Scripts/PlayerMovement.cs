@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapArea(PLeft.position, PRight.position);
+        isGrounded = Physics2D.OverlapArea(PLeft.position, PRight.position) && rb.velocity.y == 0;
         if ((Input.GetButtonDown("Jump") || touchIsGoingJump) && isGrounded)
         {
             clickJump = true;
@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
             }
             foreach (KeyValuePair<float, float> pair in touchHistory)
             {
-                if (touchCoords.y - pair.Value > 0.3)
+                if (touchCoords.y - pair.Value > 0.2)
                 {
                     ret = true;
                 }
