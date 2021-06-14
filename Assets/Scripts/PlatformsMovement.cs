@@ -26,6 +26,7 @@ public class PlatformsMovement : MonoBehaviour
 
     public PlayerMovement PlayerMovement;
     public GameScore GameScore;
+    public SoundEffectHandler SoundEffectHandler;
 
     public bool isPlatformsDowning;
     public float playerTempPosY;
@@ -33,6 +34,7 @@ public class PlatformsMovement : MonoBehaviour
 
     public bool isSpikeTouched;
     public float timeAfterSpiked;
+
     void Start()
     {
         for (int i = -2; i < 12; i += 2)
@@ -59,6 +61,7 @@ public class PlatformsMovement : MonoBehaviour
         checkAddPlatforms();
         if (player.transform.position.y < -7)
         {
+            SoundEffectHandler.playSound("death");
             doPlayerDied();
         }
     }
@@ -193,6 +196,7 @@ public class PlatformsMovement : MonoBehaviour
                 {
                     isSpikeTouched = true;
                     timeAfterSpiked = Time.time;
+                    SoundEffectHandler.playSound("death");
                 }
             }
         }

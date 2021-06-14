@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform PLeft;
     public Transform PRight;
     public Animator animator;
+    public SoundEffectHandler SoundEffectHandler;
 
     private Vector3 ref_velocity = Vector3.zero;
     public Vector3 touchCoords;
@@ -36,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         {
             clickJump = true;
             touchIsGoingJump = false;
+            SoundEffectHandler.playSound("jump");
         }
         if (isJumping && isGrounded)
         {
