@@ -109,7 +109,7 @@ public class PlatformsMovement : MonoBehaviour
     {
         foreach (Platform platform in Platforms)
         {
-            if (player.transform.position.y + 0.1 < platform.gameObj.transform.position.y)
+            if (player.transform.position.y + 0.2 < platform.gameObj.transform.position.y)
             {
                 platform.gameObj.GetComponent<BoxCollider2D>().enabled = false;
             }
@@ -233,7 +233,7 @@ public class PlatformsMovement : MonoBehaviour
                 {
                     platform.coin.GetComponent<CircleCollider2D>().enabled = false;
                     coinsInGame += 1;
-                    SoundEffectHandler.playSound("money");
+                    SoundEffectHandler.playSound("coin");
                     Destroy(platform.coin);
                     platform.coin = null;
                 }

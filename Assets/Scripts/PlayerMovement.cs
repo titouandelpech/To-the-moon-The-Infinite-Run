@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
             }
             foreach (KeyValuePair<float, float> pair in touchHistory)
             {
-                if (touchCoords.y - pair.Value > 0.2)
+                if (touchCoords.y - pair.Value > 0.15)
                 {
                     ret = true;
                 }

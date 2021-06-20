@@ -14,6 +14,7 @@ public class SoundEffectHandler : MonoBehaviour
     public AudioClip oof_high1;
     public AudioClip oof_high2;
     public AudioClip oof_high3;
+    public AudioClip coins;
     public AudioSource AudioSource;
     
     void Start()
@@ -72,6 +73,10 @@ public class SoundEffectHandler : MonoBehaviour
                         break;
                 }
             }
+        }
+        if (sound == "coin")
+        {
+            AudioSource.PlayOneShot(coins, 2);
         }
     }
 }

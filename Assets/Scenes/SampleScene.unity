@@ -1637,10 +1637,10 @@ RectTransform:
   m_Father: {fileID: 1323920698}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -223, y: 794}
-  m_SizeDelta: {x: 226.691, y: 246.4009}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 191, y: -102}
+  m_SizeDelta: {x: 226.691, y: 246.40088}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &918409977
 MonoBehaviour:
@@ -2974,6 +2974,7 @@ MonoBehaviour:
   oof_high1: {fileID: 8300000, guid: 6efcbf46f7f11964fb412c87c97b40b7, type: 3}
   oof_high2: {fileID: 8300000, guid: 95e946562b4da4e499fd21e35d5cbb47, type: 3}
   oof_high3: {fileID: 8300000, guid: 0a62765a83cccb544921da04ed60ab47, type: 3}
+  coins: {fileID: 8300000, guid: 5e1c2f107d1cb964694e902d34b49dc8, type: 3}
   AudioSource: {fileID: 1615493861}
 --- !u!82 &1615493861
 AudioSource:
@@ -3346,6 +3347,7 @@ GameObject:
   - component: {fileID: 1682748986}
   - component: {fileID: 1682748985}
   - component: {fileID: 1682748984}
+  - component: {fileID: 1682748987}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3478,7 +3480,7 @@ Animator:
   m_GameObject: {fileID: 1682748979}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 56f60ae9b507db344af78729171bbe49, type: 2}
+  m_Controller: {fileID: 22100000, guid: 796e52e5f1487104a8405689e9a52eea, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3531,6 +3533,25 @@ CircleCollider2D:
   m_Offset: {x: -0.21771632, y: 1.0122257}
   serializedVersion: 2
   m_Radius: 0.8998239
+--- !u!114 &1682748987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682748979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e262d57deee68c4f9f8c5cbfa6ad277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinNb: 0
+  defaultAnimator: {fileID: 9100000, guid: 56f60ae9b507db344af78729171bbe49, type: 2}
+  blueAnimator: {fileID: 22100000, guid: 98fe2e4d1519eb74bb62debf255d9c95, type: 2}
+  greenAnimator: {fileID: 22100000, guid: d3df6c2651687d74b85177fdf9a6860d, type: 2}
+  pinkAnimator: {fileID: 22100000, guid: aa60caefb90d39541a46e5718ff75279, type: 2}
+  redAnimator: {fileID: 22100000, guid: 796e52e5f1487104a8405689e9a52eea, type: 2}
+  playerAnimator: {fileID: 1682748984}
 --- !u!1 &1924500445
 GameObject:
   m_ObjectHideFlags: 0
