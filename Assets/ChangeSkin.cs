@@ -28,9 +28,14 @@ public class ChangeSkin : MonoBehaviour
             playerAnimator.runtimeAnimatorController = pinkAnimator as RuntimeAnimatorController;
         if (skinNb == 4)
             playerAnimator.runtimeAnimatorController = redAnimator as RuntimeAnimatorController;
-        if (PlayerPrefs.GetInt("Skin") != skinNb)
-        {
-            PlayerPrefs.SetInt("Skin", skinNb);
-        }
+        // if (PlayerPrefs.GetInt("Skin") != skinNb)
+        // {
+        //     PlayerPrefs.SetInt("Skin", skinNb);
+        // }
+    }
+    public void SetSkinNb(int nb)
+    {
+        skinNb = nb;
+        PlayerPrefs.SetInt("Skin", skinNb);
     }
 }
