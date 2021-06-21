@@ -79,11 +79,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (velocity > 0.1f)
         {
-            player.flipX = false;
+            Vector3 turned_pos = player.gameObject.transform.localScale;
+            turned_pos.x = Mathf.Abs(turned_pos.x);
+            player.gameObject.transform.localScale = turned_pos;
         }
         if (velocity < -0.1f)
         {
-            player.flipX = true;
+            Vector3 turned_pos = player.gameObject.transform.localScale;
+            turned_pos.x = -Mathf.Abs(turned_pos.x);
+            player.gameObject.transform.localScale = turned_pos;
+            
         }
     }
 
