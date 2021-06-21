@@ -19,6 +19,8 @@ public class Platform
 
 public class PlatformsMovement : MonoBehaviour
 {
+    public Animator animator;
+
     public List<Platform> Platforms = new List<Platform>();
     public GameObject firstPlatform;
     public GameObject basicPlatform;
@@ -41,6 +43,9 @@ public class PlatformsMovement : MonoBehaviour
 
     public int coinsInGame = 0;
     public Text CoinsDisplayed;
+
+    public BonusItem AppleItem;
+    public float timeAppleBegin = 0;
 
     void Start()
     {
@@ -70,6 +75,7 @@ public class PlatformsMovement : MonoBehaviour
         checkCollider();
         checkDeletePlatforms();
         checkAddPlatforms();
+        moveIfApple();
         if (player.transform.position.y < -7)
         {
             SoundEffectHandler.playSound("death");
@@ -245,6 +251,7 @@ public class PlatformsMovement : MonoBehaviour
 
     public void ResetGame()
     {
+        //Destroy Old Platforms
         foreach (Platform platform in Platforms)
         {
             Destroy(platform.gameObj);
@@ -256,11 +263,47 @@ public class PlatformsMovement : MonoBehaviour
         isSpikeTouched = false;
         Platforms.Clear();
         firstPlatform.transform.position = new Vector3(0, -4);
+
+        //Reseting Player
         player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         player.transform.position = new Vector3(0, -3.8f);
         player.transform.rotation = Quaternion.identity;
+
+        //Reseting Game Params
         GameScore.scoreValue = 0;
         coinsInGame = 0;
+
+        //Items
+        timeAppleBegin = 0;
+        AppleItem.gameObject.SetActive(true);
+        AppleItem.Start();
+
         Start();
+    }
+
+    public void moveIfApple()
+    {
+        if (AppleItem.itemEnabled)
+        {
+            if (timeAppleBegin == 0)
+            {
+                timeAppleBegin = Time.time;
+                player.GetComponent<BoxCollider2D>().enabled = false;
+                player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                animator.SetBool("isApple", true);
+            }
+            platformSpeed = 7;
+            isPlatformsDowning = true;
+            player.transform.position += new Vector3(0, 8f, 0) * Time.deltaTime;
+            if (Time.time - timeAppleBegin >= 6)
+            {
+                player.GetComponent<BoxCollider2D>().enabled = true;
+                player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                AppleItem.itemEnabled = false;
+                isPlatformsDowning = false;
+                platformSpeed = 3;
+                animator.SetBool("isApple", false);
+            }
+        }
     }
 }

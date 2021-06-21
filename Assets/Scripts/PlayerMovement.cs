@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     public bool clickJump = false;
     public bool isGrounded = false;
     public bool isJumping = false;
-    public bool touchIsOnMovingLine = true;
     public bool touchIsGoingJump = false;
 
     void Start()
@@ -50,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
     {
         getTouchCoords();
         float direction = Input.GetAxisRaw("Horizontal");
-        if (touchCoords != Vector3.zero && touchIsOnMovingLine && Mathf.Abs(firstTouchCoords.x - touchCoords.x) > 0.2)
+        if (touchCoords != Vector3.zero && Mathf.Abs(firstTouchCoords.x - touchCoords.x) > 0.2)
         {
             direction = (firstTouchCoords.x < touchCoords.x) ? 1 : -1;
         }
@@ -103,14 +102,12 @@ public class PlayerMovement : MonoBehaviour
             touchHistory.Add(new KeyValuePair<float, float>(Time.time, touchCoords.y));
             lastTouchCoords = touchCoords;
             touchIsGoingJump = checkTouchIsJumping();
-            //touchIsOnMovingLine = (touchCoords.y < -3) ? true : false;
         }
         else
         {
             touchCoords = Vector3.zero;
             firstTouchCoords = Vector3.zero;
             touchIsGoingJump = false;
-            //touchIsOnMovingLine = false;
             touchHistory.Clear();
         }
     }
