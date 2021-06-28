@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: changeSkin
       value: 
       objectReference: {fileID: 1682748987}
+    - target: {fileID: 1810741736640298673, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -393.00006
+      objectReference: {fileID: 0}
     - target: {fileID: 1810741736863313541, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -142,14 +146,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetSkinNb
       objectReference: {fileID: 0}
+    - target: {fileID: 1810741736863313543, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -398.00006
+      objectReference: {fileID: 0}
     - target: {fileID: 1810741737209534579, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
       propertyPath: changeSkin
       value: 
       objectReference: {fileID: 1682748987}
+    - target: {fileID: 1810741737209534580, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -396.00006
+      objectReference: {fileID: 0}
     - target: {fileID: 1810741737470027672, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
       propertyPath: changeSkin
       value: 
       objectReference: {fileID: 1682748987}
+    - target: {fileID: 1810741737470027673, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -396
+      objectReference: {fileID: 0}
     - target: {fileID: 1810741737505518727, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -234,6 +250,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1810741737505518729, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1810741737505518729, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1810741737505518729, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 2500
+      objectReference: {fileID: 0}
     - target: {fileID: 1810741737505518731, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
       propertyPath: m_Name
       value: Shop
@@ -254,6 +282,10 @@ PrefabInstance:
       propertyPath: changeSkin
       value: 
       objectReference: {fileID: 1682748987}
+    - target: {fileID: 1810741738543531654, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -402.00006
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df7a0cdfd936ecc4594e5d012e220f88, type: 3}
 --- !u!1 &519420028
@@ -968,6 +1000,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4011246676614861321, guid: 2db76f646b6adef48ab5030b9609a046, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011246676614861321, guid: 2db76f646b6adef48ab5030b9609a046, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4011246676614861321, guid: 2db76f646b6adef48ab5030b9609a046, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 2500
+      objectReference: {fileID: 0}
     - target: {fileID: 4011246676903155674, guid: 2db76f646b6adef48ab5030b9609a046, type: 3}
       propertyPath: m_Name
       value: Menu
