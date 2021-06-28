@@ -14,17 +14,18 @@ public class BonusItem : MonoBehaviour
     {
         Timecount.fillAmount = 1;
         ItemNb.text = PlayerPrefs.GetInt(Item).ToString();
+        PlayerPrefs.SetInt(Item, 100);
     }
 
     void Update()
     {
         Timecount.fillAmount -= 0.2f * Time.deltaTime;
-        checkAppleUsed();
+        checkItemUsed();
         if (Timecount.fillAmount == 0 || ItemNb.text == "0")
             gameObject.SetActive(false);
     }
 
-    void checkAppleUsed()
+    void checkItemUsed()
     {
         if (Input.touchCount > 0)
         {

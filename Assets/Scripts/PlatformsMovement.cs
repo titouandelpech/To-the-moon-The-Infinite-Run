@@ -45,6 +45,7 @@ public class PlatformsMovement : MonoBehaviour
     public Text CoinsDisplayed;
 
     public BonusItem AppleItem;
+    public BonusItem HeartItem;
     public float timeAppleBegin = 0;
 
     void Start()
@@ -277,7 +278,8 @@ public class PlatformsMovement : MonoBehaviour
         timeAppleBegin = 0;
         AppleItem.gameObject.SetActive(true);
         AppleItem.Start();
-
+        HeartItem.gameObject.SetActive(false);
+        HeartItem.Start();
         Start();
     }
 
