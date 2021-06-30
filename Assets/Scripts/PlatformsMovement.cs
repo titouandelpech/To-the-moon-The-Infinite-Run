@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using GoogleMobileAds.Api;
+using Random = UnityEngine.Random;
 
 public class Platform
 {
@@ -45,8 +48,12 @@ public class PlatformsMovement : MonoBehaviour
     public Text CoinsDisplayed;
 
     public BonusItem AppleItem;
-    public BonusItem HeartItem;
     public float timeAppleBegin = 0;
+    public BonusItem HeartItem;
+    public bool isWaitingForHeart = false;
+    public bool isHeartUsed = false;
+
+    private InterstitialAd interstitial;
 
     void Start()
     {
@@ -58,6 +65,7 @@ public class PlatformsMovement : MonoBehaviour
                 coin = Instantiate(basicCoin, new Vector3(platform.transform.position.x, platform.transform.position.y + 0.6f), Quaternion.identity, game.transform);
             Platforms.Add(new Platform(platform, coin));
         }
+        //RequestInterstitial();
     }
 
     void Update()
@@ -71,13 +79,31 @@ public class PlatformsMovement : MonoBehaviour
         {
             MoveAllPlatformsDown();
         }
+        if (isWaitingForHeart)
+        {
+            if (HeartItem.itemEnabled)
+            {
+                HeartItem.itemEnabled = false;
+                isHeartUsed = true;
+                player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                player.transform.position = new Vector3(0, 5f);
+                player.transform.rotation = Quaternion.identity;
+                isWaitingForHeart = false;
+            }
+            else if (HeartItem.Timecount.fillAmount == 0)
+            {
+                isWaitingForHeart = false;
+                isHeartUsed = true;
+                doPlayerDied();
+            }
+        }
         checkSpikeTouched();
         checkCoinPicked();
         checkCollider();
         checkDeletePlatforms();
         checkAddPlatforms();
         moveIfApple();
-        if (player.transform.position.y < -7)
+        if (player.transform.position.y < -7 && !isWaitingForHeart)
         {
             SoundEffectHandler.playSound("death");
             doPlayerDied();
@@ -86,10 +112,22 @@ public class PlatformsMovement : MonoBehaviour
 
     void doPlayerDied()
     {
-        if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
-            PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
-        PlayerPrefs.SetInt("Coins", PlayerPrefs.GetInt("Coins") + coinsInGame);
-        ResetGame();
+        if (PlayerPrefs.GetInt("Heart") > 0 && !isHeartUsed)
+        {
+            isWaitingForHeart = true;
+            HeartItem.gameObject.SetActive(true);
+        }
+        else
+        {
+/*            if (interstitial.IsLoaded())
+            {
+                interstitial.Show();
+            }*/
+            if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
+                PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
+            PlayerPrefs.SetInt("Coins", PlayerPrefs.GetInt("Coins") + coinsInGame);
+            ResetGame();
+        }
     }
 
     void MoveAllPlatformsDown()
@@ -216,7 +254,7 @@ public class PlatformsMovement : MonoBehaviour
             player.transform.Rotate(Vector3.forward * 1);
             return;
         }
-        foreach(Platform platform in Platforms)
+        foreach (Platform platform in Platforms)
         {
             if (platform.spike)
             {
@@ -232,7 +270,7 @@ public class PlatformsMovement : MonoBehaviour
 
     void checkCoinPicked()
     {
-        foreach(Platform platform in Platforms)
+        foreach (Platform platform in Platforms)
         {
             if (platform.coin)
             {
@@ -280,6 +318,9 @@ public class PlatformsMovement : MonoBehaviour
         AppleItem.Start();
         HeartItem.gameObject.SetActive(false);
         HeartItem.Start();
+        isHeartUsed = false;
+        isWaitingForHeart = false;
+
         Start();
     }
 
@@ -308,4 +349,32 @@ public class PlatformsMovement : MonoBehaviour
             }
         }
     }
+
+    //private void RequestInterstitial()
+    //{
+    //    #if UNITY_ANDROID
+    //        string adUnitId = "ca-app-pub-3940256099942544/1033173712";
+    //    #else
+    //        string adUnitId = "unexpected_platform";
+    //    #endif
+
+    //    interstitial = new InterstitialAd(adUnitId);
+
+    //    interstitial.OnAdOpening += HandleOnAdOpened;
+    //    interstitial.OnAdClosed += HandleOnAdClosed;
+
+    //    AdRequest request = new AdRequest.Builder().Build();
+    //    interstitial.LoadAd(request);
+    //}
+
+    //public void HandleOnAdOpened(object sender, EventArgs args)
+    //{
+    //    gameObject.GetComponent<AudioSource>().Pause();
+    //}
+
+    //public void HandleOnAdClosed(object sender, EventArgs args)
+    //{
+    //    gameObject.GetComponent<AudioSource>().Play();
+    //}
+
 }

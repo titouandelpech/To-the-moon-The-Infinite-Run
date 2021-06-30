@@ -1506,10 +1506,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 413222853, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_Radius
+      value: 53.053402
+      objectReference: {fileID: 0}
+    - target: {fileID: 413222853, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_Offset.y
+      value: -1.123061
+      objectReference: {fileID: 0}
     - target: {fileID: 8785883222437971128, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 523579195}
+    - target: {fileID: 8785883222571317220, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785883222571317221, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8785883222955050524, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
       propertyPath: m_Name
       value: Game
@@ -1518,10 +1534,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8785883222955050526, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
-      propertyPath: HeartItem
-      value: 
-      objectReference: {fileID: 1821711273}
     - target: {fileID: 8785883222955050527, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1566,13 +1578,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8785883223068574064, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
-      propertyPath: ItemCollider
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8785883223068574078, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785883223072892419, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_Radius
+      value: 60.13509
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785883223072892419, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
+      propertyPath: m_Offset.x
+      value: -4.7555847
       objectReference: {fileID: 0}
     - target: {fileID: 8785883223515963385, guid: 4a85e58d4f1655b47b3af8cd344c5896, type: 3}
       propertyPath: m_IsActive
