@@ -14,7 +14,6 @@ public class BonusItem : MonoBehaviour
     {
         Timecount.fillAmount = 1;
         ItemNb.text = PlayerPrefs.GetInt(Item).ToString();
-        PlayerPrefs.SetInt(Item, 100);
     }
 
     void Update()
@@ -30,6 +29,10 @@ public class BonusItem : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
+            if (touch.phase != TouchPhase.Began)
+            {
+                return;
+            }
             if (ItemCollider.bounds.Contains(touch.position))
             {
                 itemEnabled = true;

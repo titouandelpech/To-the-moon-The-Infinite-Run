@@ -2395,7 +2395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8785883222955050527
 Transform:
   m_ObjectHideFlags: 0
@@ -2451,8 +2451,10 @@ MonoBehaviour:
   coinsInGame: 0
   CoinsDisplayed: {fileID: 8785883222433712160}
   AppleItem: {fileID: 8785883223515963387}
-  HeartItem: {fileID: 0}
   timeAppleBegin: 0
+  HeartItem: {fileID: 8785883223068574064}
+  isWaitingForHeart: 0
+  isHeartUsed: 0
 --- !u!82 &8785883222955050513
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2760,7 +2762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8785883223068574065
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2833,8 +2835,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timecount: {fileID: 8785883223068574067}
-  ItemCollider: {fileID: 0}
-  Item: Apple
+  ItemCollider: {fileID: 413222853}
+  Item: Heart
   ItemNb: {fileID: 8785883223216904848}
   itemEnabled: 0
 --- !u!1 &8785883223072892417
@@ -2926,9 +2928,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -7.7062483, y: -6.1614695}
+  m_Offset: {x: -5.7618294, y: -6.1614695}
   serializedVersion: 2
-  m_Radius: 43.301292
+  m_Radius: 51.07896
 --- !u!1 &8785883223148093498
 GameObject:
   m_ObjectHideFlags: 0
@@ -3519,6 +3521,7 @@ GameObject:
   - component: {fileID: 8785883223224966969}
   - component: {fileID: 8785883223224966971}
   - component: {fileID: 8785883223224966968}
+  - component: {fileID: 413222853}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -3583,6 +3586,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!58 &413222853
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8785883223224966918}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.5970197, y: -0.5452876}
+  serializedVersion: 2
+  m_Radius: 48.431103
 --- !u!1 &8785883223259233760
 GameObject:
   m_ObjectHideFlags: 0
@@ -4007,7 +4026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8785883223515963384
 RectTransform:
   m_ObjectHideFlags: 0
