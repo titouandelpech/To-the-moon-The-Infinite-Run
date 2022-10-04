@@ -2455,6 +2455,7 @@ MonoBehaviour:
   HeartItem: {fileID: 8785883223068574064}
   isWaitingForHeart: 0
   isHeartUsed: 0
+  timeSinceLastAdd: 0
 --- !u!82 &8785883222955050513
 AudioSource:
   m_ObjectHideFlags: 0

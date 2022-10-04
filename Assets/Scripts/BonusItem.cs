@@ -26,7 +26,7 @@ public class BonusItem : MonoBehaviour
 
     void checkItemUsed()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && Timecount.fillAmount < 0.9)
         {
             Touch touch = Input.GetTouch(0);
             if (touch.phase != TouchPhase.Began)

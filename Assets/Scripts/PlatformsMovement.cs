@@ -54,6 +54,8 @@ public class PlatformsMovement : MonoBehaviour
     public bool isHeartUsed = false;
 
     private InterstitialAd interstitial;
+    public float timeSinceLastAdd = -10;
+    public bool isAddOppened = false;
 
     void Start()
     {
@@ -65,7 +67,7 @@ public class PlatformsMovement : MonoBehaviour
                 coin = Instantiate(basicCoin, new Vector3(platform.transform.position.x, platform.transform.position.y + 0.6f), Quaternion.identity, game.transform);
             Platforms.Add(new Platform(platform, coin));
         }
-        //RequestInterstitial();
+        RequestInterstitial();
     }
 
     void Update()
@@ -119,10 +121,11 @@ public class PlatformsMovement : MonoBehaviour
         }
         else
         {
-/*            if (interstitial.IsLoaded())
+            if (interstitial.IsLoaded() && timeSinceLastAdd < Time.time - 10)
             {
+                timeSinceLastAdd = Time.time;
                 interstitial.Show();
-            }*/
+            }
             if (PlayerPrefs.GetInt("HighScore") < GameScore.scoreValue)
                 PlayerPrefs.SetInt("HighScore", GameScore.scoreValue);
             PlayerPrefs.SetInt("Coins", PlayerPrefs.GetInt("Coins") + coinsInGame);
@@ -350,31 +353,42 @@ public class PlatformsMovement : MonoBehaviour
         }
     }
 
-    //private void RequestInterstitial()
-    //{
-    //    #if UNITY_ANDROID
-    //        string adUnitId = "ca-app-pub-3940256099942544/1033173712";
-    //    #else
-    //        string adUnitId = "unexpected_platform";
-    //    #endif
+    private void RequestInterstitial()
+    {
+        #if UNITY_ANDROID
+        string adUnitId = "ca-app-pub-3940256099942544/1033173712"; //test id
+        //string adUnitId = "ca-app-pub-8387366399494857/9929715660"; //real id
+        #else
+        string adUnitId = "unexpected_platform";
+        #endif
 
-    //    interstitial = new InterstitialAd(adUnitId);
+        interstitial = new InterstitialAd(adUnitId);
 
-    //    interstitial.OnAdOpening += HandleOnAdOpened;
-    //    interstitial.OnAdClosed += HandleOnAdClosed;
+        interstitial.OnAdOpening += HandleOnAdOpened;
+        interstitial.OnAdClosed += HandleOnAdClosed;
+        interstitial.OnAdFailedToLoad += HandleOnAdFailedToLoad;
 
-    //    AdRequest request = new AdRequest.Builder().Build();
-    //    interstitial.LoadAd(request);
-    //}
+        AdRequest request = new AdRequest.Builder().Build();
+        interstitial.LoadAd(request);
+    }
 
-    //public void HandleOnAdOpened(object sender, EventArgs args)
-    //{
-    //    gameObject.GetComponent<AudioSource>().Pause();
-    //}
+    public void HandleOnAdOpened(object sender, EventArgs args)
+    {
+        gameObject.GetComponent<AudioSource>().Pause();
+        isAddOppened = true;
+        AppleItem.gameObject.SetActive(false);
+    }
 
-    //public void HandleOnAdClosed(object sender, EventArgs args)
-    //{
-    //    gameObject.GetComponent<AudioSource>().Play();
-    //}
+    public void HandleOnAdClosed(object sender, EventArgs args)
+    {
+        gameObject.GetComponent<AudioSource>().Play();
+        isAddOppened = false;
+        AppleItem.gameObject.SetActive(true);
+    }
 
+    public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
+    {
+        MonoBehaviour.print("HandleFailedToReceiveAd event received with message: "
+                            + args.LoadAdError);
+    }
 }
